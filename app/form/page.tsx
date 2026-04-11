@@ -4,6 +4,18 @@ import { useState } from 'react';
 
 export default function FormPage() {
   const [date, setDate] = useState('');
+  const [result, setResult] = useState('');
+
+  const handleClick = async () => {
+    const res = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ date })
+    });
+
+    const data = await res.json();
+    setResult(data.result);
+  };
 
   return (
     <main style={{ padding: '40px' }}>
@@ -18,9 +30,15 @@ export default function FormPage() {
 
       <br />
 
-      <button style={{ marginTop: '20px' }}>
+      <button onClick={handleClick} style={{ marginTop: '20px' }}>
         Рассчитать
       </button>
+
+      {result && (
+        <p style={{ marginTop: '30px' }}>
+          {result}
+        </p>
+      )}
     </main>
   );
 }
