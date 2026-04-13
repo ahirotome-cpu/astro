@@ -34,9 +34,8 @@ export async function POST(req: Request) {
   );
 
   const data = await response.json();
-  console.log(data?.output?.Houses.map((item: { House: any; zodiac_sign: { name: { en: any; }; }; }) => ({ house: item?.House, name: item?.zodiac_sign?.name?.en })))
 
   return NextResponse.json({
-    result: `${data?.output?.Houses?.[7]?.zodiac_sign?.name?.en}` || "Ошибка генерации"
+    result: data?.output || "Ошибка генерации"
   });
 }
