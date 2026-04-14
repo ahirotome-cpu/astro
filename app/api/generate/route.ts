@@ -27,7 +27,7 @@ export async function POST(req: Request) {
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
-        "HTTP-Referer": "http://localhost:3000",
+        "HTTP-Referer": `${process.env.APP}`,
         "X-Title": "Astro App"
       },
       body: JSON.stringify({
