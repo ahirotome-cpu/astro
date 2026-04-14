@@ -2,7 +2,10 @@
 
 import { useState } from 'react';
 import styles from './page.module.css';
-import { TIMEZONES } from './page.constants';
+import { findPlanetHouse } from './page.utils';
+import { allPlanetsInSigns, moonInSigns, ruler7InHouseText, sevenHouseSignText } from '../texts';
+import { ZodiacHouseType, ZodiacPlanetType, ZodiacSignType } from '../types';
+import { rulers, TIMEZONES } from './page.constants';
 
 export default function FormPage() {
   const [form, setForm] = useState({
@@ -23,15 +26,43 @@ export default function FormPage() {
   };
 
   const handleClick = async () => {
-    const res = await fetch('/api/chart/houses', {
+    const housesResponse = await fetch('/api/chart/houses', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form)
+    });
+    const planetsResponse = await fetch('/api/chart/planets', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form)
     });
 
-    const data = await res.json();
-    console.log(data) 
-    // setResult(data.result);
+    const houses = await housesResponse.json();
+    const planets = await planetsResponse.json();
+
+    const house = houses?.find((item: { House: ZodiacHouseType; }) => item.House === 7)
+    const houseSign: ZodiacSignType = house.zodiac_sign.name.en
+    const houseRuler = rulers[houseSign]
+    const rulerPlanet = planets?.find((item: { planet: { en: ZodiacPlanetType }; }) => item.planet.en === houseRuler)
+    const rulerPlanetDegree = rulerPlanet?.fullDegree;
+    const rulerPlanetSign: ZodiacSignType = rulerPlanet.zodiac_sign?.name?.en
+    const rulerPlanetHouse: ZodiacHouseType | 0 = findPlanetHouse(rulerPlanetDegree, houses);
+    const moon = planets.find((item: { planet: { en: ZodiacPlanetType; }; }) => item.planet.en === "Moon");
+    const moonSign: ZodiacSignType = moon.zodiac_sign?.name?.en
+
+    const sevenHouseText = sevenHouseSignText[houseSign]
+    const rulerText = ruler7InHouseText[rulerPlanetHouse]
+    const rulerSignText = allPlanetsInSigns[houseRuler][rulerPlanetSign]
+    const moonInSignText = moonInSigns[moonSign]
+
+    const textResponse = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sevenHouseText, rulerText, rulerSignText, moonInSignText })
+    });
+
+    const data = await textResponse.json();
+    setResult(data);
   };
 
   return (

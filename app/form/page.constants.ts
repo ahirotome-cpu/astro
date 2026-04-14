@@ -1,3 +1,5 @@
+import { ZodiacBasePlanetType, ZodiacSignType } from "../types";
+
 export const TIMEZONES = [
   { value: -12, label: 'UTC -12' },
   { value: -11, label: 'UTC -11' },
@@ -26,7 +28,7 @@ export const TIMEZONES = [
   { value: 12, label: 'UTC +12' },
 ];
 
-export const rulers = {
+export const rulers: { [key in ZodiacSignType]: ZodiacBasePlanetType } = {
   Aries: "Mars",
   Taurus: "Venus",
   Gemini: "Mercury",

@@ -1,46 +1,57 @@
+import { ZodiacHouseType, ZodiacSignType } from "@/app/types";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
-  const body = await req.json();
+export interface HousesResponseTypeData {
+  House: ZodiacHouseType,
+  degree: number,
+  normDegree: number,
+  zodiac_sign: {
+    number: number,
+    name: {
+      en: ZodiacSignType
+    }
+  }
+}
 
+interface ResponseType {
+  output: { Houses: HousesResponseTypeData[] }
+}
+
+export async function POST(req: Request): Promise<NextResponse< HousesResponseTypeData[]> | undefined> {
+  const body = await req.json();
   const { year, month, date, hours, minutes, latitude, longitude, timezone } = body;
 
-  const response = await fetch(
-    "https://json.freeastrologyapi.com/western/houses",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": `${process.env.FREE_ASTROLOGY_API_KEY}`,
-      },
-      body: JSON.stringify({
-        year,
-        month,
-        date,
-        hours,
-        minutes,
-        seconds: 0,
-        latitude,
-        longitude,
-        timezone,
-        config: {
-          observation_point: "topocentric",
-          ayanamsha: "tropical",
-          house_system: "Placidus",
-          language: "en",
+  try {
+    const response = await fetch(
+      "https://json.freeastrologyapi.com/western/houses",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": `${process.env.FREE_ASTROLOGY_API_KEY}`,
         },
-      }),
-    }
-  );
-
-  const data = await response.json();
-
-  console.log("OPENROUTER RESPONSE:", JSON.stringify(data, null, 2));
-
-  const result = `${data?.output?.Houses?.[7]?.zodiac_sign?.name?.en}`
-
-  return NextResponse.json({
-    result: result || "Ошибка генерации"
-  });
-
+        body: JSON.stringify({
+          year,
+          month,
+          date,
+          hours,
+          minutes,
+          seconds: 0,
+          latitude,
+          longitude,
+          timezone,
+          config: {
+            observation_point: "topocentric",
+            ayanamsha: "tropical",
+            house_system: "Placidus",
+            language: "en",
+          },
+        }),
+      }
+    );
+    const data: ResponseType = await response.json();
+    return NextResponse.json(data?.output.Houses);
+  } catch (err) {
+    console.log("House response error:", JSON.stringify(err, null, 2));
+  }
 }
