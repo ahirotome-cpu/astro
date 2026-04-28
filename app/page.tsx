@@ -10,7 +10,7 @@ export default function Home() {
     <main className={styles.container}>
       <h1>Узнай, какие у тебя отношения</h1>
 
-      <button className={styles.button} onClick={() => router.push('/form')}>
+      <button className={styles.button} onClick={() => router.push('/main')}>
         Разобрать мои отношения
       </button>
     </main>

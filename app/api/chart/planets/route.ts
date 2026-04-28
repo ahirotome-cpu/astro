@@ -22,7 +22,7 @@ interface ResponseType {
 
 export async function POST(req: Request): Promise<NextResponse<PlanetResponseTypeData[]> | undefined> {
   const body = await req.json();
-  const { year, month, date, hours, minutes, latitude, longitude, timezone } = body;
+  const { year, month, day, hour, minute, latitude, longitude, timezone } = body;
 
   try {
 
@@ -37,9 +37,9 @@ export async function POST(req: Request): Promise<NextResponse<PlanetResponseTyp
         body: JSON.stringify({
           year,
           month,
-          date,
-          hours,
-          minutes,
+          date: day,
+          hours: hour,
+          minutes: minute,
           seconds: 0,
           latitude,
           longitude,
@@ -55,7 +55,6 @@ export async function POST(req: Request): Promise<NextResponse<PlanetResponseTyp
     );
 
     const data: ResponseType = await response.json();
-
     return NextResponse.json(data?.output);
   }
   catch (err) {

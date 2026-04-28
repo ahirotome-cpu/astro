@@ -17,9 +17,9 @@ interface ResponseType {
   output: { Houses: HousesResponseTypeData[] }
 }
 
-export async function POST(req: Request): Promise<NextResponse< HousesResponseTypeData[]> | undefined> {
+export async function POST(req: Request): Promise<NextResponse<HousesResponseTypeData[]> | undefined> {
   const body = await req.json();
-  const { year, month, date, hours, minutes, latitude, longitude, timezone } = body;
+  const { year, month, day, hour, minute, latitude, longitude, timezone } = body;
 
   try {
     const response = await fetch(
@@ -33,9 +33,9 @@ export async function POST(req: Request): Promise<NextResponse< HousesResponseTy
         body: JSON.stringify({
           year,
           month,
-          date,
-          hours,
-          minutes,
+          date: day,
+          hours: hour,
+          minutes: minute,
           seconds: 0,
           latitude,
           longitude,

@@ -1,6 +1,6 @@
-import { ZodiacBasePlanetType, ZodiacSignType } from "./types";
+import { ZodiacBasePlanetType, ZodiacHouseType, ZodiacPlanetType, ZodiacSignType } from "./types";
 
-export const sevenHouseSignText = {
+export const sevenHouseSignText: Record<ZodiacSignType, string[]> = {
   Aries: [
     "притяжение к активным и инициативным партнёрам",
     "динамичные, иногда конфликтные отношения",
@@ -99,7 +99,7 @@ export const sevenHouseSignText = {
   ],
 };
 
-export const ruler7InHouseText = {
+export const ruler7InHouseText: Record<ZodiacHouseType, string[]> = {
   1: [
     "отношения напрямую влияют на самоощущение",
     "партнёр отражает личность человека",
@@ -198,7 +198,7 @@ export const ruler7InHouseText = {
   ],
 };
 
-export const moonInSigns = {
+export const moonInSigns: Record<ZodiacSignType, string[]> = {
   Aries: [
     "эмоции вспыхивают быстро",
     "импульсивные реакции",
@@ -297,7 +297,7 @@ export const moonInSigns = {
   ],
 };
 
-export const venusInSigns = {
+export const venusInSigns: Record<ZodiacSignType, string[]> = {
   Aries: [
     "быстрое влюбление",
     "страсть и инициатива",
@@ -396,7 +396,7 @@ export const venusInSigns = {
   ],
 };
 
-export const marsInSigns = {
+export const marsInSigns: Record<ZodiacSignType, string[]> = {
   Aries: [
     "сильная инициатива",
     "прямое действие",
@@ -495,7 +495,7 @@ export const marsInSigns = {
   ],
 }
 
-export const mercuryInSigns = {
+export const mercuryInSigns: Record<ZodiacSignType, string[]> = {
   Aries: [
     "быстрое мышление",
     "прямота в речи",
@@ -594,7 +594,7 @@ export const mercuryInSigns = {
   ],
 }
 
-export const sunInSigns = {
+export const sunInSigns: Record<ZodiacSignType, string[]> = {
   Aries: [
     "сильная личная инициатива",
     "потребность действовать",
@@ -693,7 +693,7 @@ export const sunInSigns = {
   ],
 }
 
-export const jupiterInSigns = {
+export const jupiterInSigns: Record<ZodiacSignType, string[]> = {
   Aries: [
     "рост через действие",
     "инициатива",
@@ -792,7 +792,7 @@ export const jupiterInSigns = {
   ],
 }
 
-export const saturnInSigns = {
+export const saturnInSigns: Record<ZodiacSignType, string[]> = {
   Aries: [
     "ограничение в инициативе",
     "страх действия",
@@ -891,7 +891,7 @@ export const saturnInSigns = {
   ],
 }
 
-export const uranusInSigns = {
+export const uranusInSigns: Record<ZodiacSignType, string[]> = {
   Aries: [
     "резкие импульсы",
     "независимость",
@@ -990,7 +990,7 @@ export const uranusInSigns = {
   ],
 }
 
-export const neptuneInSigns = {
+export const neptuneInSigns: Record<ZodiacSignType, string[]> = {
   Aries: [
     "идеализм в действиях",
     "размытая энергия",
@@ -1089,7 +1089,7 @@ export const neptuneInSigns = {
   ],
 }
 
-export const plutoInSigns = {
+export const plutoInSigns: Record<ZodiacSignType, string[]> = {
   Aries: [
     "трансформация через действие",
     "сильная воля",
@@ -1188,7 +1188,7 @@ export const plutoInSigns = {
   ],
 }
 
-export const allPlanetsInSigns: { [key in ZodiacBasePlanetType]: { [key in ZodiacSignType]: string[] } } = {
+export const allPlanetsInSigns: Record<ZodiacBasePlanetType,Record<ZodiacSignType, string[]>> = {
   Mars: marsInSigns,
   Mercury: mercuryInSigns,
   Sun: sunInSigns,
