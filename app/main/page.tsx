@@ -16,10 +16,11 @@ export default function MainPage() {
 
   return (
     <main className={styles.page}>
-      <Chart data={formData} />
-      <div className={styles.card}>
-        <h1 className={styles.title}>Данные рождения</h1>
-        <Form onChange={handleSubmitForm} />
+      <div className={styles.wrapper}>
+        <div className={styles.firstBlock}>
+          <Form onChange={handleSubmitForm} />
+          <Chart data={formData} />
+        </div>
         <Description formData={formData}></Description>
       </div>
     </main>

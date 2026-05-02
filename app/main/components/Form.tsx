@@ -9,6 +9,7 @@ import { HousesResponseTypeData } from "@/app/api/chart/houses/route";
 export const Form = ({ onChange }: { onChange: (data: FormResponseType) => void }) => {
   const { setValue, register, handleSubmit } = useForm<FormState>({
     defaultValues: {
+      name: '',
       day: 0,
       month: 0,
       year: 0,
@@ -51,25 +52,55 @@ export const Form = ({ onChange }: { onChange: (data: FormResponseType) => void 
     })
   }, [])
 
-  return <form onSubmit={handleSubmit(handleSubmitForm)}>
-    <div className={styles.grid}>
-      <input placeholder="День" type="number" {...register("day")} />
-      <input placeholder="Месяц" type="number" {...register("month")} />
-      <input placeholder="Год" type="number" {...register("year")} />
-      <input placeholder="Часы" type="number" {...register("hour")} />
-      <input placeholder="Минуты" type="number" {...register("minute")} />
-      <div className={styles.selectWrapper}>
-        <select className={styles.select}  {...register("timezone")}  >
-          <option value="">Выберите тайм-зону</option>
-          {TIMEZONES.map((tz) => (
-            <option key={tz.value} value={tz.value}>
-              {tz.label}
-            </option>
-          ))}
-        </select>
+  return <form className={styles.form} onSubmit={handleSubmit(handleSubmitForm)}>
+    <h1 className={styles.title}>Натальная карта</h1>
+    <h2 className={styles.subtitle}>Введите данные для расчета</h2>
+    <div className={styles.inputWrap}>
+      <p className={styles.label}>Имя</p>
+      <input className={styles.input} placeholder="Имя" {...register("name")} />
+    </div>
+    <div className={styles.formRow}>
+      <div className={styles.inputWrap}>
+        <p className={styles.label}>День</p>
+        <input className={styles.input} placeholder="День" type="number" {...register("day")} />
       </div>
-      <input placeholder="Широта" type="number" step="any" {...register("latitude")} />
-      <input placeholder="Долгота" type="number" step="any" {...register("longitude")} />
+      <div className={styles.inputWrap}>
+        <p className={styles.label}>Месяц</p>
+        <input className={styles.input} placeholder="Месяц" type="number" {...register("month")} />
+      </div>
+      <div className={styles.inputWrap}>
+        <p className={styles.label}>Год</p>
+        <input className={styles.input} placeholder="Год" type="number" {...register("year")} />
+      </div>
+    </div>
+    <div className={styles.inputWrap}>
+      <p className={styles.label}>Часы</p>
+      <input className={styles.input} placeholder="Часы" type="number" {...register("hour")} />
+    </div>
+    <div className={styles.inputWrap}>
+      <p className={styles.label}>Минуты</p>
+      <input className={styles.input} placeholder="Минуты" type="number" {...register("minute")} />
+    </div>
+    <div className={styles.selectWrapper}>
+      <p className={styles.label}>Таим-зона</p>
+      <select className={styles.select}  {...register("timezone")}  >
+        <option value="">Выберите тайм-зону</option>
+        {TIMEZONES.map((tz) => (
+          <option key={tz.value} value={tz.value}>
+            {tz.label}
+          </option>
+        ))}
+      </select>
+    </div>
+    <div className={styles.formRow}>
+      <div className={styles.inputWrap}>
+        <p className={styles.label}>Широта</p>
+        <input className={styles.input} placeholder="Широта" type="number" step="any" {...register("latitude")} />
+      </div>
+      <div className={styles.inputWrap}>
+        <p className={styles.label}>Долгота</p>
+        <input className={styles.input} placeholder="Долгота" type="number" step="any" {...register("longitude")} />
+      </div>
     </div>
     <button className={styles.button} type='submit'>
       Рассчитать

@@ -3,6 +3,7 @@ import { PlanetResponseTypeData } from "../api/chart/planets/route";
 import { ZodiacHouseType, ZodiacPlanetType, ZodiacSignType } from "../types";
 
 export interface FormState {
+  name: string;
   day: number;
   month: number;
   year: number;

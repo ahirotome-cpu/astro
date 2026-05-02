@@ -1,16 +1,14 @@
 'use client';
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ZodiacBasePlanetType } from "../../types";
 import { basePlanets } from "../../constants";
 import { aspectColors, elementColors, planetSymbols, signElements, zodiacSigns } from "../constants";
 import { calculateAspects, formatData, polarToCartesian } from "../utils";
 import { ChartProps } from "./types";
 
-export const Chart: React.FC<ChartProps> = ({
-  size = 700,
-  data,
-}) => {
+export const Chart: React.FC<ChartProps> = ({ data }) => {
+  const [size, setSize] = useState(570);
   const { planets, houses } = formatData(data)
 
   const cx = size / 2;
@@ -25,6 +23,21 @@ export const Chart: React.FC<ChartProps> = ({
   const aspects = calculateAspects(planets);
   aspects.sort((a, b) => a.orb - b.orb);
   const strongAspects = aspects.filter(a => a.orb < 3);
+
+  useEffect(() => {
+    const windowWidth = document.documentElement.clientWidth;
+    let newSize;
+
+    if (windowWidth < 560) {
+      newSize = windowWidth - 40;
+    } else if (windowWidth < 1024) {
+      newSize = 520;
+    } else {
+      newSize = 570
+    }
+
+    setSize(newSize);
+  }, []);
 
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
@@ -177,7 +190,7 @@ export const Chart: React.FC<ChartProps> = ({
         );
       })}
 
-      {aspects.map((a, i) => {
+      {strongAspects.map((a, i) => {
         const p1 = planets[a.from];
         const p2 = planets[a.to];
 

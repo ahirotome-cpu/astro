@@ -5,6 +5,5 @@ export interface DescriptionProps {
 }
 
 export type ChartProps = {
-  size?: number;
   data: FormResponseType;
 };
