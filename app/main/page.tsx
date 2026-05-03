@@ -2,10 +2,10 @@
 
 import { useCallback, useState } from 'react';
 import styles from './main.module.css';
-import { FormResponseType } from './types';
 import { Chart } from './components/Chart';
 import { Description } from './components/Description';
 import { Form } from './components/Form';
+import { FormResponseType } from './components/types';
 
 export default function MainPage() {
   const [formData, setFormData] = useState<FormResponseType>({ planets: [], houses: [] })

@@ -1,0 +1,10 @@
+export { default as SunIcon } from './sun.svg';
+export { default as MoonIcon } from './moon.svg';
+export { default as MercuryIcon } from './mercury.svg';
+export { default as VenusIcon } from './venus.svg';
+export { default as MarsIcon } from './mars.svg';
+export { default as JupiterIcon } from './jupiter.svg';
+export { default as SaturnIcon } from './saturn.svg';
+export { default as UranusIcon } from './uranus.svg';
+export { default as NeptuneIcon } from './neptune.svg';
+export { default as PlutoIcon } from './pluto.svg';

@@ -1,6 +1,5 @@
-import { HousesResponseTypeData } from "../api/chart/houses/route";
 import { PlanetResponseTypeData } from "../api/chart/planets/route";
-import { ZodiacHouseType, ZodiacPlanetType, ZodiacSignType } from "../types";
+import {  ZodiacSignType } from "../types";
 
 export interface FormState {
   name: string;
@@ -23,20 +22,7 @@ export interface IData {
   insight: string
 }
 
-export type Planet = {
-  name: ZodiacPlanetType;
-  degree: number;
-};
 
-export type House = {
-  number: ZodiacHouseType;
-  degree: number;
-};
-
-export type ChartData = {
-  planets: Planet[];
-  houses: House[];
-};
 
 
 export type ElementType = "fire" | "earth" | "air" | "water";
@@ -55,10 +41,6 @@ export type Aspect = {
   orb: number; // насколько отклонение
 };
 
-export interface FormResponseType {
-  houses: HousesResponseTypeData[],
-  planets: PlanetResponseTypeData[]
-}
 
 export interface DescriptionDataType {
   sevenHouseSign?: ZodiacSignType,

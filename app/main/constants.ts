@@ -66,20 +66,7 @@ export const signElements: ElementType[] = [
   "water", // ♓
 ];
 
-export const planetSymbols: Record<ZodiacBasePlanetType, string> = {
-  Sun: "☉",
-  Moon: "☽",
-  Mercury: "☿",
-  Venus: "♀",
-  Mars: "♂",
-  Jupiter: "♃",
-  Saturn: "♄",
-  Uranus: "♅",
-  Neptune: "♆",
-  Pluto: "♇",
-};
 
-export const zodiacSigns = ["♈", "♉", "♊", "♋", "♌", "♍", "♎", "♏", "♐", "♑", "♒", "♓"];
 
 export const aspectColors: Record<AspectType, string> = {
   conjunction: "#999",

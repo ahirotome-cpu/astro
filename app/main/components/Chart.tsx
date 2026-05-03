@@ -3,9 +3,10 @@
 import React, { useEffect, useState } from "react";
 import { ZodiacBasePlanetType } from "../../types";
 import { basePlanets } from "../../constants";
-import { aspectColors, elementColors, planetSymbols, signElements, zodiacSigns } from "../constants";
-import { calculateAspects, formatData, polarToCartesian } from "../utils";
+import { aspectColors, elementColors, signElements } from "../constants";
+import { calculateAspects, formatData, planetIcons, polarToCartesian } from "./utils";
 import { ChartProps } from "./types";
+import { signIcons } from "./constants";
 
 export const Chart: React.FC<ChartProps> = ({ data }) => {
   const [size, setSize] = useState(570);
@@ -17,12 +18,13 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
   const outerR = size * 0.48;
   const innerR = size * 0.42;
   const planetR = size * 0.38;
-  const houseR = size * 0.35;
-  const aspectR = size * 0.30;
+  const houseR = size * 0.30;
+  const aspectR = size * 0.25;
 
   const aspects = calculateAspects(planets);
   aspects.sort((a, b) => a.orb - b.orb);
   const strongAspects = aspects.filter(a => a.orb < 3);
+  const asc = houses[0];
 
   useEffect(() => {
     const windowWidth = document.documentElement.clientWidth;
@@ -39,140 +41,128 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
     setSize(newSize);
   }, []);
 
+  const rotation = asc ? asc.degree : 0;
+
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-
-      {/* фон */}
-      <circle cx={cx} cy={cy} r={outerR} fill="#fafafa" />
-
       {/* кольца */}
       <circle cx={cx} cy={cy} r={outerR} fill="none" stroke="#222" />
       <circle cx={cx} cy={cy} r={innerR} fill="none" stroke="#999" />
       <circle cx={cx} cy={cy} r={houseR} fill="none" stroke="#999" />
-      <circle cx={cx} cy={cy} r={aspectR} fill="none" stroke="#ddd" />
+      <circle cx={cx} cy={cy} r={aspectR} fill="none" stroke="#999" />
 
+      {/* сектора */}
       {Array.from({ length: 12 }).map((_, i) => {
-        const start = i * 30;
+        const start = i * 30 - rotation;
         const end = start + 30;
 
         const p1 = polarToCartesian(cx, cy, outerR, start);
         const p2 = polarToCartesian(cx, cy, outerR, end);
-
         const p3 = polarToCartesian(cx, cy, innerR, end);
         const p4 = polarToCartesian(cx, cy, innerR, start);
 
         const path = `
-    M ${p1.x} ${p1.y}
-    A ${outerR} ${outerR} 0 0 0 ${p2.x} ${p2.y}
-    L ${p3.x} ${p3.y}
-    A ${innerR} ${innerR} 0 0 1 ${p4.x} ${p4.y}
-    Z
-  `;
+          M ${p1.x} ${p1.y}
+          A ${outerR} ${outerR} 0 0 0 ${p2.x} ${p2.y}
+          L ${p3.x} ${p3.y}
+          A ${innerR} ${innerR} 0 0 1 ${p4.x} ${p4.y}
+          Z
+        `;
 
         return (
           <path
             key={"sector-" + i}
             d={path}
             fill={elementColors[signElements[i]]}
-            stroke="none"
           />
         );
       })}
 
-
-      {/* знаки */}
-      {zodiacSigns.map((sign, i) => {
-        const mid = i * 30 + 15;
+      {/* знаки  */}
+      {signIcons.map((icon, i) => {
+        const mid = i * 30 + 15 - rotation;
         const { x, y } = polarToCartesian(cx, cy, outerR - 20, mid);
 
         return (
-          <text
+          <g
             key={i}
-            x={x}
-            y={y}
-            fontSize={16}
-            textAnchor="middle"
-            dominantBaseline="middle"
+            transform={`translate(${x}, ${y}) translate(-12, -12)`}
           >
-            {sign}
-          </text>
+            {icon({})}
+          </g>
         );
       })}
 
-
       {/* линии домов */}
       {houses.map((h) => {
-        const { x, y } = polarToCartesian(cx, cy, innerR, h.degree);
+        const p1 = polarToCartesian(cx, cy, aspectR, h.degree - rotation);
+        const p2 = polarToCartesian(cx, cy, innerR, h.degree - rotation);
 
         return (
           <line
             key={h.number}
-            x1={cx}
-            y1={cy}
-            x2={x}
-            y2={y}
-            stroke="#555"
-            strokeWidth={1}
+            x1={p1.x}
+            y1={p1.y}
+            x2={p2.x}
+            y2={p2.y}
+            stroke="#999"
           />
         );
       })}
 
       {/* номера домов */}
       {houses.map((h) => {
-        const next = data.houses[(h.number % 12)];
+        const next = houses[h.number % 12];
 
         const midDeg =
-          ((h.degree + next.degree + (h.degree > next.degree ? 360 : 0)) / 2) % 360;
+          ((h.degree + next.degree + (h.degree > next.degree ? 360 : 0)) / 2) % 360 - rotation;
 
-        const { x, y } = polarToCartesian(cx, cy, houseR, midDeg);
+        const { x, y } = polarToCartesian(cx, cy, houseR - 15, midDeg);
 
         return (
-          <g key={"label-" + h.number}>
-            {/* номер */}
-            <text
-              x={x}
-              y={y + 1}
-              fontSize={10}
-              textAnchor="middle"
-              dominantBaseline="middle"
-              fill="#333"
-            >
-              {h.number}
-            </text>
-          </g>
+          <text
+            key={"label-" + h.number}
+            x={x}
+            y={y}
+            fontSize={12}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fill="#333"
+          >
+            {h.number}
+          </text>
         );
       })}
 
       {/* планеты */}
-      {planets.filter(p => basePlanets.includes(p.name as ZodiacBasePlanetType)).map((p, i) => {
-        // 👇 минимальный анти-оверлап
-        const offset = (i % 3) * 6;
+      {planets
+        .filter(p => basePlanets.includes(p.name as ZodiacBasePlanetType))
+        .map((p, i) => {
+          const offset = (i % 3) * 6;
 
-        const { x, y } = polarToCartesian(
-          cx,
-          cy,
-          planetR + offset,
-          p.degree
-        );
+          const { x, y } = polarToCartesian(
+            cx,
+            cy,
+            planetR + offset,
+            p.degree
+          );
 
-        return (
-          <g key={p.name + i}>
-            <circle cx={x} cy={y} r={3} fill="#000" />
-            <text
-              x={x}
-              y={y - 8}
-              fontSize={12}
-              textAnchor="middle"
+          const Icon = planetIcons[p.name as ZodiacBasePlanetType]
+
+          return (
+            <g
+              key={i}
+              transform={`translate(${x}, ${y - 8}) translate(-12, -12)`}
             >
-              {planetSymbols[p.name as ZodiacBasePlanetType] ?? p.name}
-            </text>
-          </g>
-        );
-      })}
+              <circle r={3} fill="#000" />
+              {Icon && <Icon width={24} height={24}/>}
+            </g>
+          );
+        })}
 
       {/* границы знаков */}
       {Array.from({ length: 12 }).map((_, i) => {
-        const deg = i * 30;
+        const deg = i * 30 - rotation;
 
         const p1 = polarToCartesian(cx, cy, innerR, deg);
         const p2 = polarToCartesian(cx, cy, outerR, deg);
@@ -184,12 +174,12 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
             y1={p1.y}
             x2={p2.x}
             y2={p2.y}
-            stroke="#ccc"
-            strokeWidth={1}
+            stroke="#999"
           />
         );
       })}
 
+      {/* аспекты */}
       {strongAspects.map((a, i) => {
         const p1 = planets[a.from];
         const p2 = planets[a.to];

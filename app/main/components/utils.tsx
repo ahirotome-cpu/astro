@@ -1,8 +1,11 @@
-import { HousesResponseTypeData } from "../api/chart/houses/route";
-import { allPlanetsInSigns, moonInSigns, ruler7InHouseText, sevenHouseSignText } from "../texts";
-import { ZodiacHouseType, ZodiacPlanetType } from "../types";
-import { aspectConfig, rulers } from "./constants";
-import { Aspect, ChartData, DescriptionDataType, FormResponseType } from "./types";
+import { HousesResponseTypeData } from "@/app/api/chart/houses/route";
+import { sevenHouseSignText, ruler7InHouseText, allPlanetsInSigns, moonInSigns } from "@/app/texts";
+import { ZodiacBasePlanetType, ZodiacHouseType, ZodiacPlanetType } from "@/app/types";
+import { aspectConfig, rulers } from "../constants";
+import { Aspect, DescriptionDataType } from "../types";
+import { ChartData, FormResponseType } from "./types";
+import { SunIcon, MoonIcon, VenusIcon, JupiterIcon, SaturnIcon, UranusIcon, NeptuneIcon, PlutoIcon, MercuryIcon, MarsIcon } from "../assets/icons";
+import { FC, SVGProps } from "react";
 
 export const findPlanetHouse = (planetDegree: number, houses: HousesResponseTypeData[]): ZodiacHouseType => {
   for (let i = 0; i < houses.length; i++) {
@@ -71,8 +74,9 @@ export function calculateAspects(planets: { degree: number }[]): Aspect[] {
   return aspects;
 }
 
+
 export const formatData = (data: FormResponseType): ChartData => {
-  const formattedHouses = data.houses.map(house => ({ number: house.House, degree: house.degree }));
+  const formattedHouses = data.houses.map(house => ({ number: house.House, degree: house.degree, signNumber: house.zodiac_sign.number, normDegree: house.normDegree }));
   const formattedPlanets = data.planets.map(planet => ({ name: planet.planet.en, degree: planet.fullDegree }));
 
   return { houses: formattedHouses, planets: formattedPlanets }
@@ -99,3 +103,18 @@ export const getDescriptionData = (data: FormResponseType): DescriptionDataType 
     sevenHouseSign, sevenHouseText, rulerText, rulerSignText, moonInSignText, rulerHouse, rulerSign, ruler, moonSign
   }
 }
+
+
+
+export const planetIcons: Record<ZodiacBasePlanetType, FC<SVGProps<SVGSVGElement>>> = {
+  Sun: SunIcon,
+  Moon: MoonIcon,
+  Mercury: MercuryIcon,
+  Venus: VenusIcon,
+  Mars: MarsIcon,
+  Jupiter: JupiterIcon,
+  Saturn: SaturnIcon,
+  Uranus: UranusIcon,
+  Neptune: NeptuneIcon,
+  Pluto: PlutoIcon,
+};

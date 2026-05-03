@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { IData } from "../types";
-import { getDescriptionData } from "../utils";
+import { getDescriptionData } from "./utils";
 import { DescriptionProps } from "./types";
 import styles from '../main.module.css'
 
