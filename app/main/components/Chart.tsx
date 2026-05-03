@@ -7,17 +7,22 @@ import { aspectColors, elementColors, signElements } from "../constants";
 import { calculateAspects, formatData, planetIcons, polarToCartesian } from "./utils";
 import { ChartProps } from "./types";
 import { signIcons } from "./constants";
+import styles from '../main.module.css';
 
 export const Chart: React.FC<ChartProps> = ({ data }) => {
-  const [size, setSize] = useState(570);
   const { planets, houses } = formatData(data)
+  const [windowWidth, setWindowWidth] = useState(1400)
+  const [mounted, setMounted] = useState(false);
+
+  const isMobile = windowWidth < 560
+  const size = isMobile ? windowWidth - 40 : windowWidth < 1024 ? 520 : 570
+  const iconSize = isMobile ? 16 : 24
 
   const cx = size / 2;
   const cy = size / 2;
 
   const outerR = size * 0.48;
-  const innerR = size * 0.42;
-  const planetR = size * 0.38;
+  const innerR = size * 0.40;
   const houseR = size * 0.30;
   const aspectR = size * 0.25;
 
@@ -25,24 +30,17 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
   aspects.sort((a, b) => a.orb - b.orb);
   const strongAspects = aspects.filter(a => a.orb < 3);
   const asc = houses[0];
-
-  useEffect(() => {
-    const windowWidth = document.documentElement.clientWidth;
-    let newSize;
-
-    if (windowWidth < 560) {
-      newSize = windowWidth - 40;
-    } else if (windowWidth < 1024) {
-      newSize = 520;
-    } else {
-      newSize = 570
-    }
-
-    setSize(newSize);
-  }, []);
-
   const rotation = asc ? asc.degree : 0;
 
+  useEffect(() => {
+    setWindowWidth(document.documentElement.clientWidth)
+  }, []);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
       {/* кольца */}
@@ -50,6 +48,36 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
       <circle cx={cx} cy={cy} r={innerR} fill="none" stroke="#999" />
       <circle cx={cx} cy={cy} r={houseR} fill="none" stroke="#999" />
       <circle cx={cx} cy={cy} r={aspectR} fill="none" stroke="#999" />
+
+      {/* градусные риски */}
+      {Array.from({ length: 360 }).map((_, i) => {
+        const deg = i - rotation;
+        const isMajor = i % 30 === 0;   // знак
+        const isMedium = i % 10 === 0;  // каждые 10°
+        const isSmall = i % 5 === 0;    // каждые 5°
+
+        let tickLength = 4;
+
+        if (isMajor) tickLength = 12;
+        else if (isMedium) tickLength = 8;
+        else if (isSmall) tickLength = 6;
+
+        const p1 = polarToCartesian(cx, cy, innerR, deg);
+        const p2 = polarToCartesian(cx, cy, innerR - tickLength, deg);
+
+        return (
+          <line
+            key={"tick-" + i}
+            x1={p1.x}
+            y1={p1.y}
+            x2={p2.x}
+            y2={p2.y}
+            stroke="#555"
+            strokeWidth={isMajor ? 1.5 : 1}
+            opacity={isSmall ? 0.7 : 1}
+          />
+        );
+      })}
 
       {/* сектора */}
       {Array.from({ length: 12 }).map((_, i) => {
@@ -81,13 +109,12 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
       {/* знаки */}
       {signIcons.map((icon, i) => {
         const mid = i * 30 + 15 - rotation;
-        const { x, y } = polarToCartesian(cx, cy, outerR - 20, mid);
+        const { x, y } = polarToCartesian(cx, cy, outerR - iconSize, mid);
+        const Icon = icon
 
         return (
-          <g key={i} transform={`translate(${x}, ${y})`}>
-            <g transform="translate(-12, -12)">
-              {icon({})}
-            </g>
+          <g key={i} transform={`translate(${x - iconSize / 2}, ${y - iconSize / 2})`}>
+            <Icon className={styles.planetIcon} width={iconSize} height={iconSize} />
           </g>
         );
       })}
@@ -120,14 +147,14 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
           360 -
           rotation;
 
-        const { x, y } = polarToCartesian(cx, cy, houseR - 15, midDeg);
+        const { x, y } = polarToCartesian(cx, cy, houseR - iconSize * 2 / 3, midDeg);
 
         return (
           <text
             key={"label-" + h.number}
             x={x}
             y={y}
-            fontSize={12}
+            fontSize={isMobile ? 10 : 12}
             textAnchor="middle"
             dominantBaseline="middle"
             fill="#333"
@@ -171,17 +198,24 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
             const iconX = x + ux * iconOffset;
             const iconY = y + uy * iconOffset;
 
+            const p1 = polarToCartesian(cx, cy, innerR, baseAngle);
+            const p2 = polarToCartesian(cx, cy, innerR - 8, baseAngle);
+
             return (
               <g key={i}>
-                {/* точка на орбите */}
-                <circle cx={x} cy={y} r={3} fill="#000" />
-
-                {/* иконка внутри */}
+                <line
+                  key={i}
+                  x1={p1.x}
+                  y1={p1.y}
+                  x2={p2.x}
+                  y2={p2.y}
+                  stroke="#000"
+                  strokeWidth={1.5}
+                  opacity={1}
+                />
                 {Icon && (
-                  <g transform={`translate(${iconX}, ${iconY})`}>
-                    <g transform="translate(-12, -12)">
-                      <Icon width={24} height={24} />
-                    </g>
+                  <g transform={`translate(${iconX - iconSize / 2}, ${iconY - iconSize / 2})`}>
+                    <Icon width={iconSize} height={iconSize} />
                   </g>
                 )}
               </g>

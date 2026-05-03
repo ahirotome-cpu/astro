@@ -75,24 +75,25 @@ export const Form = ({ onChange }: { onChange: (data: FormResponseType) => void 
         <input className={styles.input} placeholder="Год" type="number" {...register("year", { valueAsNumber: true })} />
       </div>
     </div>
-    <div className={styles.inputWrap}>
-      <p className={styles.label}>Часы</p>
-      <input className={styles.input} placeholder="Часы" type="number" {...register("hour", { valueAsNumber: true })} />
-    </div>
-    <div className={styles.inputWrap}>
-      <p className={styles.label}>Минуты</p>
-      <input className={styles.input} placeholder="Минуты" type="number" {...register("minute", { valueAsNumber: true })} />
-    </div>
-    <div className={styles.selectWrapper}>
-      <p className={styles.label}>Таим-зона</p>
-      <select className={styles.select}  {...register("timezone")}  >
-        <option value="">Выберите тайм-зону</option>
-        {TIMEZONES.map((tz) => (
-          <option key={tz.value} value={tz.value}>
-            {tz.label}
-          </option>
-        ))}
-      </select>
+    <div className={styles.formRow}>
+      <div className={styles.inputWrap}>
+        <p className={styles.label}>Часы</p>
+        <input className={styles.input} placeholder="Часы" type="number" {...register("hour", { valueAsNumber: true })} />
+      </div>
+      <div className={styles.inputWrap}>
+        <p className={styles.label}>Минуты</p>
+        <input className={styles.input} placeholder="Минуты" type="number" {...register("minute", { valueAsNumber: true })} />
+      </div>
+      <div className={styles.selectWrapper}>
+        <p className={styles.label}>Тайм-зона</p>
+        <select className={styles.select}  {...register("timezone", { valueAsNumber: true })}  >
+          {TIMEZONES.map((tz) => (
+            <option key={tz.value} value={tz.value}>
+              {tz.label}
+            </option>
+          ))}
+        </select>
+      </div>
     </div>
     <div className={styles.formRow}>
       <div className={styles.inputWrap}>

@@ -8,3 +8,16 @@ export { default as SaturnIcon } from './saturn.svg';
 export { default as UranusIcon } from './uranus.svg';
 export { default as NeptuneIcon } from './neptune.svg';
 export { default as PlutoIcon } from './pluto.svg';
+
+export { default as AriesIcon } from './aries.svg' 
+export { default as TaurusIcon } from './taurus.svg' 
+export { default as GeminiIcon } from './gemini.svg' 
+export { default as CancerIcon } from './cancer.svg' 
+export { default as LeoIcon } from './leo.svg' 
+export { default as VirgoIcon } from './virgo.svg' 
+export { default as LibraIcon } from './libra.svg' 
+export { default as ScorpioIcon } from './scorpio.svg'
+export { default as SagittariusIcon } from './sagittarius.svg'
+export { default as CapricornIcon } from './capricorn.svg'
+export { default as AquariusIcon } from './aquarius.svg'
+export { default as PiscesIcon } from './pisces.svg' 
