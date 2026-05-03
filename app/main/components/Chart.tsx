@@ -62,12 +62,12 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
         const p4 = polarToCartesian(cx, cy, innerR, start);
 
         const path = `
-          M ${p1.x} ${p1.y}
-          A ${outerR} ${outerR} 0 0 0 ${p2.x} ${p2.y}
-          L ${p3.x} ${p3.y}
-          A ${innerR} ${innerR} 0 0 1 ${p4.x} ${p4.y}
-          Z
-        `;
+        M ${p1.x} ${p1.y}
+        A ${outerR} ${outerR} 0 0 0 ${p2.x} ${p2.y}
+        L ${p3.x} ${p3.y}
+        A ${innerR} ${innerR} 0 0 1 ${p4.x} ${p4.y}
+        Z
+      `;
 
         return (
           <path
@@ -78,25 +78,26 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
         );
       })}
 
-      {/* знаки  */}
+      {/* знаки */}
       {signIcons.map((icon, i) => {
         const mid = i * 30 + 15 - rotation;
         const { x, y } = polarToCartesian(cx, cy, outerR - 20, mid);
 
         return (
-          <g
-            key={i}
-            transform={`translate(${x}, ${y}) translate(-12, -12)`}
-          >
-            {icon({})}
+          <g key={i} transform={`translate(${x}, ${y})`}>
+            <g transform="translate(-12, -12)">
+              {icon({})}
+            </g>
           </g>
         );
       })}
 
       {/* линии домов */}
       {houses.map((h) => {
-        const p1 = polarToCartesian(cx, cy, aspectR, h.degree - rotation);
-        const p2 = polarToCartesian(cx, cy, innerR, h.degree - rotation);
+        const deg = h.degree - rotation;
+
+        const p1 = polarToCartesian(cx, cy, aspectR, deg);
+        const p2 = polarToCartesian(cx, cy, innerR, deg);
 
         return (
           <line
@@ -115,7 +116,9 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
         const next = houses[h.number % 12];
 
         const midDeg =
-          ((h.degree + next.degree + (h.degree > next.degree ? 360 : 0)) / 2) % 360 - rotation;
+          ((h.degree + next.degree + (h.degree > next.degree ? 360 : 0)) / 2) %
+          360 -
+          rotation;
 
         const { x, y } = polarToCartesian(cx, cy, houseR - 15, midDeg);
 
@@ -135,30 +138,56 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
       })}
 
       {/* планеты */}
-      {planets
-        .filter(p => basePlanets.includes(p.name as ZodiacBasePlanetType))
-        .map((p, i) => {
-          const offset = (i % 3) * 6;
+      {(() => {
+        const usedAngles: Record<string, number> = {};
 
-          const { x, y } = polarToCartesian(
-            cx,
-            cy,
-            planetR + offset,
-            p.degree
-          );
+        return planets
+          .filter(p => basePlanets.includes(p.name as ZodiacBasePlanetType))
+          .map((p, i) => {
+            const baseAngle = p.degree - rotation;
 
-          const Icon = planetIcons[p.name as ZodiacBasePlanetType]
+            const key = Math.round(baseAngle / 3);
+            const index = usedAngles[key] ?? 0;
+            usedAngles[key] = index + 1;
 
-          return (
-            <g
-              key={i}
-              transform={`translate(${x}, ${y - 8}) translate(-12, -12)`}
-            >
-              <circle r={3} fill="#000" />
-              {Icon && <Icon width={24} height={24}/>}
-            </g>
-          );
-        })}
+            const r = innerR + index * 10;
+
+            const { x, y } = polarToCartesian(cx, cy, r, baseAngle);
+
+            const Icon = planetIcons[p.name as ZodiacBasePlanetType];
+
+            // 👉 направление к центру
+            const dx = cx - x;
+            const dy = cy - y;
+            const len = Math.sqrt(dx * dx + dy * dy);
+
+            // нормализация (вектор внутрь круга)
+            const ux = dx / len;
+            const uy = dy / len;
+
+            // смещение внутрь (на 10–14px — подбирается визуально)
+            const iconOffset = 20;
+
+            const iconX = x + ux * iconOffset;
+            const iconY = y + uy * iconOffset;
+
+            return (
+              <g key={i}>
+                {/* точка на орбите */}
+                <circle cx={x} cy={y} r={3} fill="#000" />
+
+                {/* иконка внутри */}
+                {Icon && (
+                  <g transform={`translate(${iconX}, ${iconY})`}>
+                    <g transform="translate(-12, -12)">
+                      <Icon width={24} height={24} />
+                    </g>
+                  </g>
+                )}
+              </g>
+            );
+          });
+      })()}
 
       {/* границы знаков */}
       {Array.from({ length: 12 }).map((_, i) => {
