@@ -54,8 +54,8 @@ export const Form = ({ onChange }: { onChange: (data: FormResponseType) => void 
   }, [])
 
   return <form className={styles.form} onSubmit={handleSubmit(handleSubmitForm)}>
-    <h1 className={styles.title}>Натальная карта</h1>
-    <h2 className={styles.subtitle}>Введите данные для расчета</h2>
+    <h2 className={styles.title}>Натальная карта</h2>
+    <h3 className={styles.subtitle}>Введите данные для расчета</h3>
     <div className={styles.inputWrap}>
       <p className={styles.label}>Имя</p>
       <input className={styles.input} placeholder="Имя" {...register("name")} />

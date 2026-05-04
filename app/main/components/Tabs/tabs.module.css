@@ -1,0 +1,45 @@
+.tabs {
+  display: flex;
+  flex-direction: column;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: var(--shadow);
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.tabsRow {
+  display: flex;
+  gap: 0.5rem
+}
+
+.tab {
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 1rem;
+  background: var(--background);
+}
+
+.tab:hover {
+  background: var(--bg-input);
+  cursor: pointer;
+}
+
+.tabText {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  color: var(--text-secondary);
+}
+
+.tab:hover .icon {
+  color: var(--highlight-main);
+}

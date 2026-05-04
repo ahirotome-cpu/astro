@@ -1,5 +1,8 @@
 .chart {
-  background: var(--bg-chart);
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: var(--shadow);
 }
 
 /* --- КОЛЬЦА --- */
@@ -77,7 +80,7 @@
 
 .planetIcon {
   stroke: var(--planet-default);
-  fill: var(--bg-chart);
+  fill: var(--background);
   transition: all 0.2s ease;
 }
 

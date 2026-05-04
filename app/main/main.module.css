@@ -124,7 +124,7 @@
   margin: 0 auto;
   padding: 1.5rem;
 
-  background: var(--bg-card);
+  background: var(--background);
   border: 1px solid var(--border);
   border-radius: 1rem;
   box-shadow: var(--shadow);

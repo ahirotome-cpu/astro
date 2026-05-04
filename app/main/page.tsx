@@ -6,6 +6,7 @@ import { Chart } from './components/Chart/Chart';
 import { Description } from './components/Description';
 import { Form } from './components/Form';
 import { FormResponseType } from './components/types';
+import { Tabs } from './components/Tabs';
 
 export default function MainPage() {
   const [formData, setFormData] = useState<FormResponseType>({ planets: [], houses: [] })
@@ -21,7 +22,8 @@ export default function MainPage() {
           <Form onChange={handleSubmitForm} />
           <Chart data={formData} />
         </div>
-        <Description formData={formData}></Description>
+        <Tabs/>
+        {/* <Description formData={formData}></Description> */}
       </div>
     </main>
   );
