@@ -3,14 +3,17 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-    /* фон */
-  --bg-page: #f6f7fb;
+  /* фон */
+  --bg-page: #F6F7FB;
+  --bg-chart: #FFFFFF;
   --bg-card: #ffffff;
   --bg-input: #f1f3f9;
 
   /* текст */
   --text-main: #1f2430;
-  --text-secondary: #6b7280;
+  --text-primary: #2B2F38;
+  --text-secondary: #6B7280;
+  --text-muted: #9AA1AC;
 
   /* акцент */
   --primary: #5b5bd6;
@@ -21,6 +24,25 @@
 
   /* тени */
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+
+  /* chart */
+  --line-soft: #E3E6ED;
+  --line-medium: #C9CED8;
+  --line-strong: #8F96A3;
+
+
+  /* --- планеты --- */
+  --planet-default: #2F3441;
+  --planet-active: #1F6FEB;
+
+  /* --- аспекты --- */
+  --aspect-harmony: #3A7AFE;
+  --aspect-tension: #E05252;
+  --aspect-neutral: #9AA1AC;
+
+  /* --- highlight --- */
+  --highlight-main: #1F6FEB;
+  --highlight-soft: #DCE7FF;
 }
 
 @theme inline {

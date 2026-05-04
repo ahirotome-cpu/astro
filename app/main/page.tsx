@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from 'react';
 import styles from './main.module.css';
-import { Chart } from './components/Chart';
+import { Chart } from './components/Chart/Chart';
 import { Description } from './components/Description';
 import { Form } from './components/Form';
 import { FormResponseType } from './components/types';

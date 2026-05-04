@@ -1,11 +1,12 @@
 import { HousesResponseTypeData } from "@/app/api/chart/houses/route";
 import { sevenHouseSignText, ruler7InHouseText, allPlanetsInSigns, moonInSigns } from "@/app/texts";
 import { ZodiacBasePlanetType, ZodiacHouseType, ZodiacPlanetType } from "@/app/types";
-import { aspectConfig, rulers } from "../constants";
+import { aspectConfig, rulers, strongAspectConfig } from "../constants";
 import { Aspect, DescriptionDataType } from "../types";
 import { ChartData, FormResponseType } from "./types";
 import { SunIcon, MoonIcon, VenusIcon, JupiterIcon, SaturnIcon, UranusIcon, NeptuneIcon, PlutoIcon, MercuryIcon, MarsIcon } from "../assets/icons";
 import { FC, SVGProps } from "react";
+import { PlanetResponseTypeData } from "@/app/api/chart/planets/route";
 
 export const findPlanetHouse = (planetDegree: number, houses: HousesResponseTypeData[]): ZodiacHouseType => {
   for (let i = 0; i < houses.length; i++) {
@@ -44,24 +45,26 @@ export const polarToCartesian = (
   };
 };
 
-export function calculateAspects(planets: { degree: number }[]): Aspect[] {
+export function calculateAspects(planets: PlanetResponseTypeData[], isStrong?: boolean): Aspect[] {
+  const aspectOrbs = isStrong ? strongAspectConfig : aspectConfig
   const aspects: Aspect[] = [];
 
   for (let i = 0; i < planets.length; i++) {
     for (let j = i + 1; j < planets.length; j++) {
-      let angle = Math.abs(planets[i].degree - planets[j].degree);
+      let angle = Math.abs(planets[i].fullDegree - planets[j].fullDegree);
 
       if (angle > 180) {
         angle = 360 - angle;
       }
 
-      for (const config of aspectConfig) {
+      for (const config of aspectOrbs) {
         const diff = Math.abs(angle - config.angle);
 
         if (diff <= config.orb) {
+          console.log(planets[i], planets[j], config.type, diff)
           aspects.push({
-            from: i,
-            to: j,
+            from: planets[i],
+            to: planets[j],
             type: config.type,
             orb: diff,
           });

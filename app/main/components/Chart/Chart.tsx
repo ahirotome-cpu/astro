@@ -1,16 +1,17 @@
 'use client';
 
 import React, { useEffect, useState } from "react";
-import { ZodiacBasePlanetType } from "../../types";
-import { basePlanets } from "../../constants";
-import { aspectColors, elementColors, signElements } from "../constants";
-import { calculateAspects, formatData, planetIcons, polarToCartesian } from "./utils";
-import { ChartProps } from "./types";
-import { signIcons } from "./constants";
-import styles from '../main.module.css';
+import { ZodiacBasePlanetType } from "../../../types";
+import { basePlanets } from "../../../constants";
+import {  elementColors, signElements } from "../../constants";
+import { calculateAspects, formatData, planetIcons, polarToCartesian } from "../utils";
+import { ChartProps } from "../types";
+import { signIcons } from "../constants";
+import styles from './chart.module.css';
+import clsx from "clsx";
 
 export const Chart: React.FC<ChartProps> = ({ data }) => {
-  const { planets, houses } = formatData(data)
+  const { planets, houses } = data
   const [windowWidth, setWindowWidth] = useState(1400)
   const [mounted, setMounted] = useState(false);
 
@@ -26,9 +27,9 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
   const houseR = size * 0.30;
   const aspectR = size * 0.25;
 
-  const aspects = calculateAspects(planets);
+  const onlyBasePlanets =  planets.filter(p => basePlanets.includes(p.planet.en as ZodiacBasePlanetType))
+  const aspects = calculateAspects(onlyBasePlanets, true);
   aspects.sort((a, b) => a.orb - b.orb);
-  const strongAspects = aspects.filter(a => a.orb < 3);
   const asc = houses[0];
   const rotation = asc ? asc.degree : 0;
 
@@ -42,22 +43,26 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
 
   if (!mounted) return null;
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+    <svg
+      width={size}
+      height={size}
+      viewBox={`0 0 ${size} ${size}`}
+      className={styles.chart}
+    >
       {/* кольца */}
-      <circle cx={cx} cy={cy} r={outerR} fill="none" stroke="#222" />
-      <circle cx={cx} cy={cy} r={innerR} fill="none" stroke="#999" />
-      <circle cx={cx} cy={cy} r={houseR} fill="none" stroke="#999" />
-      <circle cx={cx} cy={cy} r={aspectR} fill="none" stroke="#999" />
+      <circle cx={cx} cy={cy} r={outerR} fill="none" className={styles.outerCircle} />
+      <circle cx={cx} cy={cy} r={innerR} fill="none" className={styles.innerCircle} />
+      <circle cx={cx} cy={cy} r={houseR} fill="none" className={styles.houseCircle} />
+      <circle cx={cx} cy={cy} r={aspectR} fill="none" className={styles.aspectCircle} />
 
       {/* градусные риски */}
       {Array.from({ length: 360 }).map((_, i) => {
         const deg = i - rotation;
-        const isMajor = i % 30 === 0;   // знак
-        const isMedium = i % 10 === 0;  // каждые 10°
-        const isSmall = i % 5 === 0;    // каждые 5°
+        const isMajor = i % 30 === 0;
+        const isMedium = i % 10 === 0;
+        const isSmall = i % 5 === 0;
 
         let tickLength = 4;
-
         if (isMajor) tickLength = 12;
         else if (isMedium) tickLength = 8;
         else if (isSmall) tickLength = 6;
@@ -72,9 +77,12 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
             y1={p1.y}
             x2={p2.x}
             y2={p2.y}
-            stroke="#555"
-            strokeWidth={isMajor ? 1.5 : 1}
-            opacity={isSmall ? 0.7 : 1}
+            className={clsx(
+              styles.tick,
+              isMajor && styles.major,
+              isMedium && styles.medium,
+              isSmall && styles.small
+            )}
           />
         );
       })}
@@ -90,17 +98,18 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
         const p4 = polarToCartesian(cx, cy, innerR, start);
 
         const path = `
-        M ${p1.x} ${p1.y}
-        A ${outerR} ${outerR} 0 0 0 ${p2.x} ${p2.y}
-        L ${p3.x} ${p3.y}
-        A ${innerR} ${innerR} 0 0 1 ${p4.x} ${p4.y}
-        Z
-      `;
+      M ${p1.x} ${p1.y}
+      A ${outerR} ${outerR} 0 0 0 ${p2.x} ${p2.y}
+      L ${p3.x} ${p3.y}
+      A ${innerR} ${innerR} 0 0 1 ${p4.x} ${p4.y}
+      Z
+    `;
 
         return (
           <path
             key={"sector-" + i}
             d={path}
+            className={styles.sector}
             fill={elementColors[signElements[i]]}
           />
         );
@@ -110,11 +119,14 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
       {signIcons.map((icon, i) => {
         const mid = i * 30 + 15 - rotation;
         const { x, y } = polarToCartesian(cx, cy, outerR - iconSize, mid);
-        const Icon = icon
+        const Icon = icon;
 
         return (
-          <g key={i} transform={`translate(${x - iconSize / 2}, ${y - iconSize / 2})`}>
-            <Icon className={styles.planetIcon} width={iconSize} height={iconSize} />
+          <g
+            key={i}
+            transform={`translate(${x - iconSize / 2}, ${y - iconSize / 2})`}
+          >
+            <Icon width={iconSize} height={iconSize} />
           </g>
         );
       })}
@@ -128,38 +140,43 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
 
         return (
           <line
-            key={h.number}
+            key={h.House}
             x1={p1.x}
             y1={p1.y}
             x2={p2.x}
             y2={p2.y}
-            stroke="#999"
+            className={styles.houseLine}
           />
         );
       })}
 
       {/* номера домов */}
       {houses.map((h) => {
-        const next = houses[h.number % 12];
+        const next = houses[h.House % 12];
 
         const midDeg =
           ((h.degree + next.degree + (h.degree > next.degree ? 360 : 0)) / 2) %
           360 -
           rotation;
 
-        const { x, y } = polarToCartesian(cx, cy, houseR - iconSize * 2 / 3, midDeg);
+        const { x, y } = polarToCartesian(
+          cx,
+          cy,
+          houseR - (iconSize * 2) / 3,
+          midDeg
+        );
 
         return (
           <text
-            key={"label-" + h.number}
+            key={"label-" + h.House}
             x={x}
             y={y}
             fontSize={isMobile ? 10 : 12}
             textAnchor="middle"
             dominantBaseline="middle"
-            fill="#333"
+            className={styles.houseLabel}
           >
-            {h.number}
+            {h.House}
           </text>
         );
       })}
@@ -168,10 +185,9 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
       {(() => {
         const usedAngles: Record<string, number> = {};
 
-        return planets
-          .filter(p => basePlanets.includes(p.name as ZodiacBasePlanetType))
+        return onlyBasePlanets
           .map((p, i) => {
-            const baseAngle = p.degree - rotation;
+            const baseAngle = p.fullDegree - rotation;
 
             const key = Math.round(baseAngle / 3);
             const index = usedAngles[key] ?? 0;
@@ -181,18 +197,15 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
 
             const { x, y } = polarToCartesian(cx, cy, r, baseAngle);
 
-            const Icon = planetIcons[p.name as ZodiacBasePlanetType];
+            const Icon = planetIcons[p.planet.en as ZodiacBasePlanetType];
 
-            // 👉 направление к центру
             const dx = cx - x;
             const dy = cy - y;
             const len = Math.sqrt(dx * dx + dy * dy);
 
-            // нормализация (вектор внутрь круга)
             const ux = dx / len;
             const uy = dy / len;
 
-            // смещение внутрь (на 10–14px — подбирается визуально)
             const iconOffset = 20;
 
             const iconX = x + ux * iconOffset;
@@ -202,19 +215,20 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
             const p2 = polarToCartesian(cx, cy, innerR - 8, baseAngle);
 
             return (
-              <g key={i}>
+              <g key={i} className={styles.planetWrapper}>
                 <line
-                  key={i}
                   x1={p1.x}
                   y1={p1.y}
                   x2={p2.x}
                   y2={p2.y}
-                  stroke="#000"
-                  strokeWidth={1.5}
-                  opacity={1}
+                  className={styles.planetTick}
                 />
+
                 {Icon && (
-                  <g transform={`translate(${iconX - iconSize / 2}, ${iconY - iconSize / 2})`}>
+                  <g
+                    className={styles.planetIcon}
+                    transform={`translate(${iconX - iconSize / 2}, ${iconY - iconSize / 2})`}
+                  >
                     <Icon width={iconSize} height={iconSize} />
                   </g>
                 )}
@@ -237,18 +251,25 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
             y1={p1.y}
             x2={p2.x}
             y2={p2.y}
-            stroke="#999"
+            className={styles.signLine}
           />
         );
       })}
 
       {/* аспекты */}
-      {strongAspects.map((a, i) => {
-        const p1 = planets[a.from];
-        const p2 = planets[a.to];
+      {aspects.map((a, i) => {
+        const p1 = a.from;
+        const p2 = a.to;
 
-        const c1 = polarToCartesian(cx, cy, aspectR, p1.degree);
-        const c2 = polarToCartesian(cx, cy, aspectR, p2.degree);
+        const c1 = polarToCartesian(cx, cy, aspectR, p1.fullDegree - rotation);
+        const c2 = polarToCartesian(cx, cy, aspectR, p2.fullDegree - rotation);
+
+        const aspectClass =
+          a.type === "trine" || a.type === "sextile"
+            ? styles.harmony
+            : a.type === "square" || a.type === "opposition"
+              ? styles.tension
+              : styles.neutral;
 
         return (
           <line
@@ -257,9 +278,7 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
             y1={c1.y}
             x2={c2.x}
             y2={c2.y}
-            stroke={aspectColors[a.type]}
-            strokeWidth={1}
-            opacity={0.8}
+            className={clsx(styles.aspect, aspectClass)}
           />
         );
       })}

@@ -1,5 +1,5 @@
 import { PlanetResponseTypeData } from "../api/chart/planets/route";
-import {  ZodiacSignType } from "../types";
+import {  ZodiacBasePlanetType, ZodiacPlanetType, ZodiacSignType } from "../types";
 
 export interface FormState {
   name: string;
@@ -35,8 +35,8 @@ export type AspectType =
   | "opposition"; // 180°
 
 export type Aspect = {
-  from: number;
-  to: number;
+  from: PlanetResponseTypeData;
+  to: PlanetResponseTypeData;
   type: AspectType;
   orb: number; // насколько отклонение
 };

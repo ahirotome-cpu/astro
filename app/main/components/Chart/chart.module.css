@@ -1,0 +1,134 @@
+.chart {
+  background: var(--bg-chart);
+}
+
+/* --- КОЛЬЦА --- */
+
+.outerCircle {
+  stroke: var(--line-medium);
+  stroke-width: 1.2;
+}
+
+.innerCircle,
+.houseCircle,
+.aspectCircle {
+  stroke: var(--line-soft);
+  stroke-width: 1;
+}
+
+/* --- РИСКИ --- */
+
+.tick {
+  stroke: var(--line-medium);
+}
+
+.tick.small {
+  opacity: 0.4;
+}
+
+.tick.medium {
+  opacity: 0.6;
+}
+
+.tick.major {
+  stroke: var(--line-strong);
+  stroke-width: 1.4;
+  opacity: 1;
+}
+
+/* --- СЕКТОРА (знаки) --- */
+
+.sector {
+  opacity: 0.35;
+  transition: opacity 0.2s ease;
+}
+
+/* можно будет усиливать при hover */
+.sector:hover {
+  opacity: 0.55;
+}
+
+/* --- ГРАНИЦЫ ЗНАКОВ --- */
+
+.signLine {
+  stroke: var(--line-soft);
+  stroke-width: 1;
+}
+
+/* --- ДОМА --- */
+
+.houseLine {
+  stroke: var(--line-medium);
+  stroke-width: 1.2;
+}
+
+.houseLabel {
+  fill: var(--text-secondary);
+  font-weight: 500;
+  transition: fill 0.2s ease;
+}
+
+/* --- ПЛАНЕТЫ --- */
+
+.planetTick {
+  stroke: var(--text-primary);
+  stroke-width: 1.4;
+}
+
+.planetIcon {
+  fill: var(--planet-default);
+  transition: all 0.2s ease;
+}
+
+.planetWrapper {
+  cursor: pointer;
+}
+
+/* лёгкий hover */
+.planetWrapper:hover .planetIcon {
+  fill: var(--planet-active);
+  transform: scale(1.1);
+}
+
+/* --- АСПЕКТЫ --- */
+
+.aspect {
+  stroke-width: 1.2;
+  opacity: 0.5;
+  transition: all 0.2s ease;
+}
+
+.aspect.harmony {
+  stroke: var(--aspect-harmony);
+}
+
+.aspect.tension {
+  stroke: var(--aspect-tension);
+}
+
+.aspect.neutral {
+  stroke: var(--aspect-neutral);
+}
+
+/* hover по аспекту */
+.aspect:hover {
+  opacity: 1;
+  stroke-width: 2;
+}
+
+/* --- ФОКУС / HIGHLIGHT (на будущее) --- */
+
+.dimmed {
+  opacity: 0.2;
+}
+
+.highlight {
+  stroke: var(--highlight-main);
+  fill: var(--highlight-soft);
+  opacity: 1 !important;
+}
+
+.highlightStroke {
+  stroke: var(--highlight-main);
+  stroke-width: 2;
+}

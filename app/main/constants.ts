@@ -83,3 +83,11 @@ export const aspectConfig = [
   { type: "trine", angle: 120, orb: 6 },
   { type: "opposition", angle: 180, orb: 8 },
 ] as const;
+
+export const strongAspectConfig = [
+  { type: "conjunction", angle: 0, orb: 6 },
+  { type: "sextile", angle: 60, orb: 4 },
+  { type: "square", angle: 90, orb: 6 },
+  { type: "trine", angle: 120, orb: 6 },
+  { type: "opposition", angle: 180, orb: 6 },
+] as const;
