@@ -23,7 +23,6 @@ export const Form = ({ onChange }: { onChange: (data: FormResponseType) => void 
   })
 
   const handleSubmitForm = async (formFields: FormState) => {
-    console.log(formFields)
     for (const [key, value] of Object.entries(formFields)) {
       localStorage.setItem(key, value)
     }

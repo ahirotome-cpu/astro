@@ -61,7 +61,6 @@ export function calculateAspects(planets: PlanetResponseTypeData[], isStrong?: b
         const diff = Math.abs(angle - config.angle);
 
         if (diff <= config.orb) {
-          console.log(planets[i], planets[j], config.type, diff)
           aspects.push({
             from: planets[i],
             to: planets[j],

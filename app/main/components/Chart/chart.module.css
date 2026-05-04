@@ -76,7 +76,8 @@
 }
 
 .planetIcon {
-  fill: var(--planet-default);
+  stroke: var(--planet-default);
+  fill: var(--bg-chart);
   transition: all 0.2s ease;
 }
 
@@ -86,8 +87,11 @@
 
 /* лёгкий hover */
 .planetWrapper:hover .planetIcon {
-  fill: var(--planet-active);
-  transform: scale(1.1);
+  stroke: var(--planet-active);
+}
+
+.planetWrapper:hover line {
+  stroke: var(--planet-active);
 }
 
 /* --- АСПЕКТЫ --- */

@@ -48,6 +48,7 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
       height={size}
       viewBox={`0 0 ${size} ${size}`}
       className={styles.chart}
+      data-mode="ui"
     >
       {/* кольца */}
       <circle cx={cx} cy={cy} r={outerR} fill="none" className={styles.outerCircle} />
