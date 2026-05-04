@@ -16,7 +16,7 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
   const [mounted, setMounted] = useState(false);
 
   const isMobile = windowWidth < 560
-  const size = isMobile ? windowWidth - 40 : windowWidth < 1024 ? 520 : 570
+  const size = isMobile ? windowWidth - 40 : 520 
   const iconSize = isMobile ? 16 : 24
 
   const cx = size / 2;

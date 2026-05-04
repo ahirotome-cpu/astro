@@ -5,9 +5,8 @@ import styles from '../main.module.css';
 import { TIMEZONES } from "../constants";
 import { PlanetResponseTypeData } from "@/app/api/chart/planets/route";
 import { HousesResponseTypeData } from "@/app/api/chart/houses/route";
-import { FormResponseType } from "./types";
 
-export const Form = ({ onChange }: { onChange: (data: FormResponseType) => void }) => {
+export const Form = () => {
   const { setValue, register, handleSubmit } = useForm<FormState>({
     defaultValues: {
       name: '',
@@ -40,7 +39,8 @@ export const Form = ({ onChange }: { onChange: (data: FormResponseType) => void 
     const houses: HousesResponseTypeData[] = await housesResponse.json();
     const planets: PlanetResponseTypeData[] = await planetsResponse.json();
 
-    onChange({ houses, planets })
+    localStorage.setItem('planets', JSON.stringify(planets))
+    localStorage.setItem('houses', JSON.stringify(houses))    
   };
 
   useEffect(() => {

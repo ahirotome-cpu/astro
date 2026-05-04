@@ -24,6 +24,10 @@
   background: var(--background);
 }
 
+.activeTab {
+  background: var(--bg-input);
+}
+
 .tab:hover {
   background: var(--bg-input);
   cursor: pointer;
