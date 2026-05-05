@@ -2,21 +2,24 @@
 
 import React, { useEffect, useState } from "react";
 import { ZodiacBasePlanetType } from "../../../types";
-import { basePlanets } from "../../../constants";
-import {  elementColors, signElements } from "../../constants";
-import { calculateAspects, formatData, planetIcons, polarToCartesian } from "../utils";
-import { ChartProps } from "../types";
-import { signIcons } from "../constants";
+import { basePlanets, planetIcons } from "./constants";
+import { elementColors, signElements } from "./constants";
+import { calculateAspects, polarToCartesian } from "./utils";
+import { signIcons } from "./constants";
 import styles from './chart.module.css';
 import clsx from "clsx";
+import { HousesResponseTypeData } from "@/app/api/chart/houses/route";
+import { PlanetResponseTypeData } from "@/app/api/chart/planets/route";
 
-export const Chart: React.FC<ChartProps> = ({ data }) => {
-  const { planets, houses } = data
+export const Chart: React.FC = () => {
+  const [houses, setHouses] = useState<HousesResponseTypeData[]>([]);
+  const [planets, setPlanets] = useState<PlanetResponseTypeData[]>([]);
+
   const [windowWidth, setWindowWidth] = useState(1400)
   const [mounted, setMounted] = useState(false);
 
   const isMobile = windowWidth < 560
-  const size = isMobile ? windowWidth - 40 : 520 
+  const size = isMobile ? windowWidth - 40 : 520
   const iconSize = isMobile ? 16 : 24
 
   const cx = size / 2;
@@ -27,7 +30,7 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
   const houseR = size * 0.30;
   const aspectR = size * 0.25;
 
-  const onlyBasePlanets =  planets.filter(p => basePlanets.includes(p.planet.en as ZodiacBasePlanetType))
+  const onlyBasePlanets = planets.filter(p => basePlanets.includes(p.planet.en as ZodiacBasePlanetType))
   const aspects = calculateAspects(onlyBasePlanets, true);
   aspects.sort((a, b) => a.orb - b.orb);
   const asc = houses[0];
@@ -39,6 +42,14 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
 
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const h = localStorage.getItem('houses');
+    const p = localStorage.getItem('planets');
+
+    setHouses(h ? JSON.parse(h) : []);
+    setPlanets(p ? JSON.parse(p) : []);
   }, []);
 
   if (!mounted) return null;

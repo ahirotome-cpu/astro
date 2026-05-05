@@ -5,8 +5,6 @@
   box-shadow: var(--shadow);
 }
 
-/* --- КОЛЬЦА --- */
-
 .outerCircle {
   stroke: var(--line-medium);
   stroke-width: 1.2;
@@ -18,8 +16,6 @@
   stroke: var(--line-soft);
   stroke-width: 1;
 }
-
-/* --- РИСКИ --- */
 
 .tick {
   stroke: var(--line-medium);
@@ -39,26 +35,19 @@
   opacity: 1;
 }
 
-/* --- СЕКТОРА (знаки) --- */
-
 .sector {
   opacity: 0.35;
   transition: opacity 0.2s ease;
 }
 
-/* можно будет усиливать при hover */
 .sector:hover {
   opacity: 0.55;
 }
-
-/* --- ГРАНИЦЫ ЗНАКОВ --- */
 
 .signLine {
   stroke: var(--line-soft);
   stroke-width: 1;
 }
-
-/* --- ДОМА --- */
 
 .houseLine {
   stroke: var(--line-medium);
@@ -70,8 +59,6 @@
   font-weight: 500;
   transition: fill 0.2s ease;
 }
-
-/* --- ПЛАНЕТЫ --- */
 
 .planetTick {
   stroke: var(--text-primary);
@@ -88,7 +75,6 @@
   cursor: pointer;
 }
 
-/* лёгкий hover */
 .planetWrapper:hover .planetIcon {
   stroke: var(--planet-active);
 }
@@ -96,8 +82,6 @@
 .planetWrapper:hover line {
   stroke: var(--planet-active);
 }
-
-/* --- АСПЕКТЫ --- */
 
 .aspect {
   stroke-width: 1.2;
@@ -117,13 +101,10 @@
   stroke: var(--aspect-neutral);
 }
 
-/* hover по аспекту */
 .aspect:hover {
   opacity: 1;
   stroke-width: 2;
 }
-
-/* --- ФОКУС / HIGHLIGHT (на будущее) --- */
 
 .dimmed {
   opacity: 0.2;

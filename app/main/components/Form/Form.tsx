@@ -1,8 +1,9 @@
 import { useEffect } from "react";
-import { FormState, } from "../types";
+import { FormState } from "./types";
 import { useForm } from "react-hook-form";
-import styles from '../main.module.css';
-import { TIMEZONES } from "../constants";
+import styles from './form.module.css';
+import mainStyles from '../../main.module.css';
+import { TIMEZONES } from "./constants";
 import { PlanetResponseTypeData } from "@/app/api/chart/planets/route";
 import { HousesResponseTypeData } from "@/app/api/chart/houses/route";
 
@@ -40,7 +41,7 @@ export const Form = () => {
     const planets: PlanetResponseTypeData[] = await planetsResponse.json();
 
     localStorage.setItem('planets', JSON.stringify(planets))
-    localStorage.setItem('houses', JSON.stringify(houses))    
+    localStorage.setItem('houses', JSON.stringify(houses))
   };
 
   useEffect(() => {
@@ -54,8 +55,8 @@ export const Form = () => {
   }, [])
 
   return <form className={styles.form} onSubmit={handleSubmit(handleSubmitForm)}>
-    <h2 className={styles.title}>Натальная карта</h2>
-    <h3 className={styles.subtitle}>Введите данные для расчета</h3>
+    <h2 className={mainStyles.title}>Натальная карта</h2>
+    <h3 className={mainStyles.subtitle}>Введите данные для расчета</h3>
     <div className={styles.inputWrap}>
       <p className={styles.label}>Имя</p>
       <input className={styles.input} placeholder="Имя" {...register("name")} />

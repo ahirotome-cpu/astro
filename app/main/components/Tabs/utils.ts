@@ -51,14 +51,7 @@ export const getPrompt = ({ type, houses, planets }: {
       Управитель 7 дома ${ruler} в ${rulerHouse} доме: ${rulerText}.
       Управитель 7 дома в знаке ${rulerSign}: ${rulerSignText}.
       Луна в знаке ${moonSign}: ${moonInSignText}`
-      const format = `{
-  "title": string,
-  "core": string,
-  "behavior": string[],
-  "tension": string[],
-  "why": string,
-  "insight": string
-}`
+      const format = `{"title": string, "core": string, "behavior": string[], "tension": string[], "why": string, "insight": string }`
 
       return { data, format }
     }
