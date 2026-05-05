@@ -1,4 +1,4 @@
-import { allPlanetsInSigns, moonInSigns, ruler7InHouseText, sevenHouseSignText } from "../texts"
+import { allPlanetsInSigns, moonInSigns, ruler7InHouseText, sevenHouseSignText } from "./components/Tabs/texts"
 import { ZodiacHouseType, ZodiacPlanetType } from "../types"
 
 export const houses: { number: ZodiacHouseType, degree: number }[] = [

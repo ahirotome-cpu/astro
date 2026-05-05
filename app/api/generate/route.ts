@@ -1,18 +1,11 @@
 import { NextResponse } from "next/server";
 
-
 export async function POST(req: Request) {
-  const { sevenHouseSign, sevenHouseText, rulerHouse, rulerSign, ruler, rulerText, rulerSignText, moonInSignText, moonSign } = await req.json();
+  const {data, format} = await req.json();
 
   // const model = 'openrouter/free'
   // const model = 'meta-llama/llama-3.2-3b-instruct:free'
   const model = 'openai/gpt-oss-120b:free'
-
-  // const content = `Ты собираешь интерпретацию отношений из готовых смысловых блоков.
-  //   Твой текст звучит так - 7 дом в рыбах, значит (тут текст из этих блоков ${sevenHouseText})
-  //   Управитель 7 дома ${ruler} в ${rulerHouse} доме, значит (тут текст из этих блоков ${rulerText})
-  //   Управитель 7 дома в знаке ${rulerSign}, значит (тут текст из этих блоков ${rulerSignText})
-  //   Луна в знаке ${moonSign}, значит (тут текст из этих блоков ${moonInSignText})`
 
   const content = `
 Ты создаёшь интерпретацию отношений на основе астрологических факторов.
@@ -23,10 +16,8 @@ export async function POST(req: Request) {
 СТИЛЬ:
 - пиши просто и по делу, без эзотерики и пафоса
 - описывай поведение, чувства и реакции, а не абстрактные идеи
-- избегай общих фраз и клише
 - не используй ярлыки и типологии
 - не звучи как диагноз или оценка
-- смягчай формулировки (используй "можешь", "часто", "есть склонность")
 - пиши естественно, как будто человек узнаёт себя в тексте
 - избегай сложных и перегруженных формулировок
 - не используй английские слова
@@ -60,19 +51,7 @@ export async function POST(req: Request) {
 
 ---
 
-ИСХОДНЫЕ ДАННЫЕ:
-
-7 дом в ${sevenHouseSign}:
-${sevenHouseText}
-
-Управитель 7 дома ${ruler} в ${rulerHouse} доме:
-${rulerText}
-
-Управитель 7 дома в знаке ${rulerSign}:
-${rulerSignText}
-
-Луна в знаке ${moonSign}:
-${moonInSignText}
+ИСХОДНЫЕ ДАННЫЕ: ${data}
 
 ---
 
@@ -80,16 +59,7 @@ ${moonInSignText}
 Не объясняй астрологию.
 Не копируй формулировки из исходных данных.
 
-ФОРМАТ:
-
-{
-  "title": string,
-  "core": string,
-  "behavior": string[],
-  "tension": string[],
-  "why": string,
-  "insight": string
-}
+ФОРМАТ: ${format}
 
 ПРАВИЛА:
 - ничего кроме JSON не возвращай
@@ -98,7 +68,6 @@ ${moonInSignText}
 - массивы = только короткие пункты
 - все строки должны быть короткими и простыми
 `;
-
 
   try {
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {

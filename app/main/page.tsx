@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import styles from './main.module.css';
 import { Chart } from './components/Chart/Chart';
-import { Description } from './components/Description';
 import { Form } from './components/Form';
 import { FormResponseType } from './components/types';
 import { Tabs } from './components/Tabs';
@@ -27,7 +26,6 @@ export default function MainPage() {
           <Chart data={formData} />
         </div>
         <Tabs/>
-        {/* <Description formData={formData}></Description> */}
       </div>
     </main>
   );

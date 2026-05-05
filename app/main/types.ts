@@ -13,14 +13,7 @@ export interface FormState {
   longitude: number;
 };
 
-export interface IData {
-  title: string,
-  core: string,
-  behavior: string[],
-  tension: string[],
-  why: string,
-  insight: string
-}
+
 
 
 

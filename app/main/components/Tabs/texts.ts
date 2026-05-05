@@ -1,4 +1,4 @@
-import { ZodiacBasePlanetType, ZodiacHouseType, ZodiacPlanetType, ZodiacSignType } from "./types";
+import { ZodiacBasePlanetType, ZodiacHouseType, ZodiacPlanetType, ZodiacSignType } from "../../../types";
 
 export const sevenHouseSignText: Record<ZodiacSignType, string[]> = {
   Aries: [

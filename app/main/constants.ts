@@ -29,21 +29,6 @@ export const TIMEZONES = [
   { value: 12, label: 'UTC +12' },
 ];
 
-export const rulers: { [key in ZodiacSignType]: ZodiacBasePlanetType } = {
-  Aries: "Mars",
-  Taurus: "Venus",
-  Gemini: "Mercury",
-  Cancer: "Moon",
-  Leo: "Sun",
-  Virgo: "Mercury",
-  Libra: "Venus",
-  Scorpio: "Pluto",
-  Sagittarius: "Jupiter",
-  Capricorn: "Saturn",
-  Aquarius: "Uranus",
-  Pisces: "Neptune",
-};
-
 export const elementColors = {
   fire: "#ffe5e5",   // мягкий красный
   earth: "#e8f5e9",  // мягкий зелёный
