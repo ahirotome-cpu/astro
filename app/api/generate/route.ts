@@ -1,11 +1,16 @@
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  const {data, format} = await req.json();
+  const { data, structure } = await req.json();
 
   // const model = 'openrouter/free'
   // const model = 'meta-llama/llama-3.2-3b-instruct:free'
   const model = 'openai/gpt-oss-120b:free'
+  const format = `{
+      "title": string, 
+      "description": string, 
+      "texts": {"title": string, "description": string}[]
+    }`
 
   const content = `
 Ты создаёшь интерпретацию отношений на основе астрологических факторов.
@@ -24,40 +29,14 @@ export async function POST(req: Request) {
 - проверяй орфографию
 
 ОГРАНИЧЕНИЯ:
-- сократи исходный материал примерно на 50%
-- убери повторы
-- делай короткие абзацы
 - не используй сложные метафоры
-- не пиши советы списком
 - избегай слов с сильной негативной окраской ("пустота", "вакуум", "должен")
 - избегай неудачных или двусмысленных формулировок, которые могут восприниматься негативно или неуместно
 
-СТРУКТУРА:
-
-1. Заголовок (короткая фраза, без ярлыков)
-2. Короткое описание (2–3 предложения с ключевым внутренним конфликтом)
-
-3. Как человек ведёт себя в отношениях
-- 3–5 конкретных паттернов
-
-4. Где возникает напряжение
-- 3–5 конкретных ситуаций/триггеров
-
-5. Почему это происходит
-- 1 короткий абзац с внутренним конфликтом
-
-6. Ключевой инсайт
-- 1 абзац, без банальных советов
-
----
-
+СТРУКТУРА: ${structure}
 ИСХОДНЫЕ ДАННЫЕ: ${data}
 
----
-
 Собери финальный текст по структуре.
-Не объясняй астрологию.
-Не копируй формулировки из исходных данных.
 
 ФОРМАТ: ${format}
 
@@ -65,8 +44,6 @@ export async function POST(req: Request) {
 - ничего кроме JSON не возвращай
 - не добавляй комментарии
 - не используй Markdown
-- массивы = только короткие пункты
-- все строки должны быть короткими и простыми
 `;
 
   try {
@@ -92,11 +69,8 @@ export async function POST(req: Request) {
     const parsed = JSON.parse(result);
     const json = {
       title: parsed.title ?? "",
-      core: parsed.core ?? "",
-      behavior: Array.isArray(parsed.behavior) ? parsed.behavior : [],
-      tension: Array.isArray(parsed.tension) ? parsed.tension : [],
-      why: parsed.why ?? "",
-      insight: parsed.insight ?? "",
+      description: parsed.description ?? "",
+      texts: parsed.texts ?? []
     };
 
     return NextResponse.json(json);

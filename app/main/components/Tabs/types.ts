@@ -1,5 +1,3 @@
-import { JSX, ReactElement } from "react";
-
 export enum TabType {
   RELATIONS = 'relations',
   FINANCE = 'finance',
@@ -8,22 +6,22 @@ export enum TabType {
 }
 
 export interface Tab {
-  id: number, 
-  name: string, 
-  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>, 
+  id: number,
+  name: string,
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>,
   type: TabType
 }
 
 export interface Prompt {
   data: string;
-  format: string
+  structure: string
 }
 
-export interface IData {
+export type IData = {
   title: string,
-  core: string,
-  behavior: string[],
-  tension: string[],
-  why: string,
-  insight: string
+  description: string,
+  texts: {
+    title: string,
+    description: string
+  }[]
 }
