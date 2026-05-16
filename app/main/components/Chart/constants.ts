@@ -1,7 +1,7 @@
 import { ZodiacBasePlanetType } from "@/app/types";
 import { ElementType } from "./types";
 import { FC, SVGProps } from "react";
-import { SunIcon, MoonIcon, MercuryIcon, VenusIcon, MarsIcon, JupiterIcon, SaturnIcon, UranusIcon, NeptuneIcon, PlutoIcon, AquariusIcon, AriesIcon, CancerIcon, CapricornIcon, GeminiIcon, LeoIcon, LibraIcon, PiscesIcon, SagittariusIcon, ScorpioIcon, TaurusIcon, VirgoIcon } from "../../assets/icons";
+import { SunIcon, MoonIcon, MercuryIcon, VenusIcon, MarsIcon, JupiterIcon, SaturnIcon, UranusIcon, NeptuneIcon, PlutoIcon, AquariusIcon, AriesIcon, CancerIcon, CapricornIcon, GeminiIcon, LeoIcon, LibraIcon, PiscesIcon, SagittariusIcon, ScorpioIcon, TaurusIcon, VirgoIcon } from "../../../assets/icons";
 
 export const signElements: ElementType[] = [
   "fire",  // ♈

@@ -2,8 +2,10 @@ import { HousesResponseTypeData } from "@/app/api/chart/houses/route";
 import { Prompt, TabType } from "./types";
 import { PlanetResponseTypeData } from "@/app/api/chart/planets/route";
 import { ZodiacHouseType } from "@/app/types";
-import { allPlanetsInSigns, eightHouseSignText, moonInSigns, ruler2InHouseText, ruler7InHouseText, secondHouseSignText, sevenHouseSignText, venusInSigns } from "./texts";
+import { allPlanetsInSigns, moonInSigns, ruler7InHouseText, sevenHouseSignText, venusInSigns } from "./texts";
 import { rulers } from "./constants";
+import { eightHouseSignText, secondHouseSignText } from "@/app/assets/texts/houseSign";
+import { ruler2InHouseText } from "@/app/assets/texts/rulerInHouse";
 
 export const findPlanetHouse = (planetDegree: number, houses: HousesResponseTypeData[]): ZodiacHouseType => {
   for (let i = 0; i < houses.length; i++) {
@@ -51,24 +53,8 @@ export const getPrompt = ({ type, houses, planets }: {
       Управитель 7 дома ${ruler} в ${rulerHouse} доме: ${rulerText}.
       Управитель 7 дома в знаке ${rulerSign}: ${rulerSignText}.
       Луна в знаке ${moonSign}: ${moonInSignText}`
-      const format = `{
-      "title": string, 
-      "core": string, 
-      "behavior": string[], 
-      "tension": string[], 
-      "why": string, 
-      "insight": string }`
 
-            const structure = `
-    title: Заголовок
-    description: Короткое описание
-    texts: [{title: "Как человек ведёт себя в отношениях", description: текст с ответом},
-    {title: "Где возникает напряжение", description: текст с ответом},
-    {title: "Почему это происходит", description: текст с ответом},
-    {title: "Ключевой инсайт", description: текст с ответом}]
-    `
-
-      return { data, structure }
+      return  {data, theme: 'Отношения'} 
     }
     case TabType.FINANCE: {
       const secondHouse = houses.find((item) => item.House === 2)
@@ -87,31 +73,17 @@ export const getPrompt = ({ type, houses, planets }: {
       const venus = planets.find((item) => item.planet.en === "Venus")
       const venusSign = venus?.zodiac_sign?.name?.en
 
-      const secondHouseText = secondHouseSign ? secondHouseSignText[secondHouseSign] : ['']
-      const rulerHouseText = rulerHouse ? ruler2InHouseText[rulerHouse] : ['']
+      const secondHouseText = secondHouseSign ? secondHouseSignText[secondHouseSign] : ''
+      const rulerHouseText = rulerHouse ? ruler2InHouseText[rulerHouse] : ''
       const rulerSignText = secondHouseRulerName && rulerSign
         ? allPlanetsInSigns[secondHouseRulerName][rulerSign]
         : ['']
 
-      const eightHouseText = eightHouseSign ? eightHouseSignText[eightHouseSign] : ['']
+      const eightHouseText = eightHouseSign ? eightHouseSignText[eightHouseSign] : ''
       const venusText = venusSign ? venusInSigns[venusSign] : ['']
 
-      const data = `
-      2 дом в ${secondHouseSign}: ${secondHouseText}.
-      Управитель 2 дома ${secondHouseRulerName} в ${rulerHouse} доме: ${rulerHouseText}.
-      Управитель 2 дома в знаке ${rulerSign}: ${rulerSignText}.      
-      8 дом в ${eightHouseSign}: ${eightHouseText}.      
-      Венера в знаке ${venusSign}: ${venusText}.
-      `
-      const structure = `
-    title: Заголовок
-    description: Короткое описание
-    texts: [{title: "Откуда приходят деньги", description: текст с ответом},
-    {title: "Как тратятся деньги", description: текст с ответом},
-    {title: "Как взаимодействует с общими ресурсами и деньгами партнеров", description: текст с ответом},
-    {title: "Общая картина", description: текст с ответом}]
-    `
-      return { data, structure }
+      const data = `${secondHouseText}; ${rulerHouseText}; ${eightHouseText}`
+      return  {data, theme: 'Финансы'} 
     }
     default: {
       return null
